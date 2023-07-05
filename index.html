@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a3484265ad.js" crossorigin="anonymous"></script>
+    <title>Country</title>
+</head>
+<body>
+   <div class="container col-lg-4 col-md-4 col-sm-4 py-5 border bg-primary-subtle">
+        <div><input type="text" id="place" class="form-control" onkeypress="key(event)" placeholder="Enter Country Name"></div>
+        <div id="btn"><button id="search" onclick="search()" class="btn btn-primary mt-2">Search</button></div>
+   </div>
+    <div id="result" class="container col-lg-4 col-md-4 col-sm-4 border mt-3 py-2 bg-primary-subtle">
+
+    </div>
+</body>
+<script>
+    refresh=()=>{
+        window.location="index.html"
+    }
+    key=(event)=>{
+        x=event.code
+        if(x=="Enter"){
+            search()
+        }
+    }
+    search=()=>{
+        place=place.value
+        fetch(`https://restcountries.com/v3.1/name/${place}`).then((data)=>{data.json().then((data)=>{details(data)})})
+        btn.innerHTML+=`<btn onclick="refresh()" class="btn btn-primary mt-2 ms-2"><i class="fa-solid fa-arrows-rotate"></btn>`
+
+    }
+    details=(data)=>{
+        data=data
+
+        // if(place in data[0].name.common){
+        country=data[0].name.common
+
+        flags=data[0].flags
+        flag=Object.values(flags)[0]
+        continent=data[0].continents
+
+        officialName=data[0].name.official
+        capital=data[0].capital[0]
+
+        curr=data[0].currencies
+        currency=Object.values(curr)[0].name
+        symbol=Object.values(curr)[0].symbol
+
+    result.innerHTML=`
+    <div class="card w-100" style="width: 18rem;">
+  <img src="${flag}" class="card-img-top" alt="flag">
+  <div class="card-body">
+    <h5 class="card-title">${country}</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Official Name: ${officialName}</li>
+    <li class="list-group-item">Capital: ${capital}</li>
+    <li class="list-group-item">Currency: ${currency}</li>
+    <li class="list-group-item">Currency Symbol: ${symbol}</li>
+    <li class="list-group-item">Continent: ${continent}</li>
+  </ul>
+</div>
+
+    `   
+}     
+// else{
+//     alert("No Matching Country Found")
+// }
+
+    // }
+</script>
+</html>
